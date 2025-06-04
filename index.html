@@ -1,130 +1,133 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <title>Amor que pulsa</title>
+  <meta charset="UTF-8">
+  <title>Jogo da Memória do Amor</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
-
     body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(#ffc0cb, #ffe4e1);
       margin: 0;
-      background: #ffd1dc;
-      font-family: 'Arial', sans-serif;
-      color: #88002b;
+      padding: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
+      justify-content: flex-start;
       min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
     }
-
     h1 {
-      font-family: 'Parisienne', cursive;
-      font-size: 4em;
-      margin-bottom: 0.2em;
-      text-shadow: 2px 2px 5px #b3003b88;
+      color: #d6336c;
+      margin-top: 40px;
     }
-
-    p {
-      max-width: 600px;
-      font-size: 1.5em;
-      text-align: center;
-      margin-bottom: 40px;
-      line-height: 1.4;
-      font-weight: 500;
-      text-shadow: 1px 1px 3px #c44160aa;
+    .instrucoes {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
     }
-
-    .photos {
-      display: flex;
-      gap: 20px;
+    .tabuleiro {
+      display: grid;
+      grid-template-columns: repeat(4, 100px);
+      gap: 15px;
       justify-content: center;
-      flex-wrap: wrap;
     }
-
-    .photos img {
-      width: 200px;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px #b3003b66;
-      transition: transform 0.3s ease;
+    .carta {
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
+      font-size: 2rem;
+      transition: transform 0.3s ease;
     }
-    .photos img:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 30px #b3003bcc;
+    .carta.virada {
+      background-color: #fff0f5;
+      transform: rotateY(180deg);
     }
-
-    /* Corações pulsantes */
-    .heart {
-      position: fixed;
-      width: 30px;
-      height: 30px;
-      background-color: #ff1e5f;
-      left: 50%;
-      top: 50%;
-      transform-origin: center;
-      animation: pulse 1.5s infinite ease-in-out;
-      opacity: 0.7;
-      clip-path: polygon(
-        50% 0%, 
-        61% 15%, 
-        75% 15%, 
-        84% 25%, 
-        84% 40%, 
-        75% 50%, 
-        50% 75%, 
-        25% 50%, 
-        16% 40%, 
-        16% 25%, 
-        25% 15%, 
-        39% 15%
-      );
-      filter: drop-shadow(0 0 3px #ff4f7d);
+    #vitoria {
+      margin-top: 30px;
+      text-align: center;
+      background: #fff0f5;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-
-    @keyframes pulse {
-      0%, 100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0.7;
-      }
-      50% {
-        transform: translate(-50%, -50%) scale(1.3);
-        opacity: 1;
-      }
+    .escondido {
+      display: none;
     }
-
-    /* Vários corações em posições diferentes */
-    .heart:nth-child(1) { top: 20%; left: 25%; animation-delay: 0s; }
-    .heart:nth-child(2) { top: 30%; left: 75%; animation-delay: 0.5s; }
-    .heart:nth-child(3) { top: 70%; left: 15%; animation-delay: 1s; }
-    .heart:nth-child(4) { top: 80%; left: 70%; animation-delay: 1.2s; }
-    .heart:nth-child(5) { top: 50%; left: 50%; animation-delay: 0.3s; }
-
+    .botao-premio {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <h1>Amor que pulsa</h1>
-  <p>
-    Nosso amor é feito de pequenos momentos, sorrisos trocados e corações que batem juntos, mesmo quando estamos longe.  
-    Que cada dia seja uma nova página do nosso lindo livro de histórias.
-  </p>
-
-  <div class="photos">
-    <img src="https://i.imgur.com/3xD2Z5g.jpg" alt="Foto romântica 1" />
-    <img src="https://i.imgur.com/KlmZ9EC.jpg" alt="Foto romântica 2" />
-    <img src="https://i.imgur.com/ebxRbDZ.jpg" alt="Foto romântica 3" />
+  <h1>Jogo da Memória do Amor 💘</h1>
+  <p class="instrucoes">Encontre todos os pares de corações para ganhar sua surpresa!</p>
+  <div class="tabuleiro" id="tabuleiro"></div>
+  <div id="vitoria" class="escondido">
+    <h2>Parabéns, meu amor! ❤️</h2>
+    <p>Você completou o jogo da memória do nosso amor.<br>Agora clique abaixo para ganhar sua recompensa!</p>
+    <a href="premio.html" class="botao-premio">Ver o prêmio</a>
   </div>
 
-  <!-- Corações pulsantes -->
-  <div class="heart"></div>
-  <div class="heart"></div>
-  <div class="heart"></div>
-  <div class="heart"></div>
-  <div class="heart"></div>
+  <script>
+    const emojis = ['💕','💜','💛','💙','💚','❤️'];
+    let cartas = [...emojis, ...emojis];
+    cartas = cartas.sort(() => 0.5 - Math.random());
 
+    const tabuleiro = document.getElementById('tabuleiro');
+    let primeiraCarta = null;
+    let bloqueado = false;
+    let paresEncontrados = 0;
+
+    cartas.forEach((emoji, index) => {
+      const carta = document.createElement('div');
+      carta.classList.add('carta');
+      carta.dataset.valor = emoji;
+      carta.dataset.index = index;
+      carta.innerHTML = '';
+
+      carta.addEventListener('click', () => {
+        if (bloqueado || carta.classList.contains('virada')) return;
+
+        carta.classList.add('virada');
+        carta.innerHTML = emoji;
+
+        if (!primeiraCarta) {
+          primeiraCarta = carta;
+        } else {
+          if (primeiraCarta.dataset.valor === carta.dataset.valor && primeiraCarta.dataset.index !== carta.dataset.index) {
+            primeiraCarta = null;
+            paresEncontrados++;
+            if (paresEncontrados === emojis.length) {
+              document.getElementById('vitoria').classList.remove('escondido');
+            }
+          } else {
+            bloqueado = true;
+            setTimeout(() => {
+              primeiraCarta.classList.remove('virada');
+              primeiraCarta.innerHTML = '';
+              carta.classList.remove('virada');
+              carta.innerHTML = '';
+              primeiraCarta = null;
+              bloqueado = false;
+            }, 1000);
+          }
+        }
+      });
+
+      tabuleiro.appendChild(carta);
+    });
+  </script>
 </body>
 </html>
