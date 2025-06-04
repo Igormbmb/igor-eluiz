@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Seu Prêmio 💌</title>
+  <style>
+    body {
+      margin: 0;
+      background: #ffeaf4;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .envelope {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      background: #fff;
+      border: 2px solid #d6336c;
+      border-radius: 8px;
+      overflow: hidden;
+      animation: float 2s ease-in-out infinite alternate;
+    }
+
+    .flap {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: #d6336c;
+      clip-path: polygon(0 0, 50% 60%, 100% 0);
+      transform-origin: top;
+      animation: openFlap 2s ease forwards;
+    }
+
+    .letter {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #333;
+      z-index: 1;
+      animation: slideLetter 2s 1.2s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes openFlap {
+      to {
+        transform: rotateX(180deg);
+      }
+    }
+
+    @keyframes slideLetter {
+      to {
+        top: 0%;
+        opacity: 1;
+      }
+    }
+
+    @keyframes float {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(-10px);
+      }
+    }
+
+    .heart {
+      font-size: 24px;
+      color: #d6336c;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="envelope">
+    <div class="flap"></div>
+    <div class="letter">
+      <div class="heart">💖</div>
+      <strong>Meu amor,</strong><br><br>
+      Desde o dia que você entrou na minha vida, tudo ficou mais bonito, mais leve, mais colorido. Você é o meu presente diário, meu parceiro, meu sorriso favorito.<br><br>
+      Obrigado por existir e por jogar comigo — na vida e no amor. 💌<br><br>
+      <em>Com todo meu carinho,<br>Igor 💘</em>
+    </div>
+  </div>
+
+</body>
+</html>
