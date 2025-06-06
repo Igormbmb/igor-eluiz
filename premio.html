@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Declaração de Amor 💌</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f9c5d1; /* Rosa suave */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+    }
+
+    .container {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      perspective: 1000px;
+    }
+
+    .envelope {
+      width: 100%;
+      height: 100%;
+      background: #e63946; /* Vermelho envelope */
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 10px;
+      transition: transform 1s ease;
+      z-index: 2;
+    }
+
+    .envelope.open {
+      transform: rotateX(180deg);
+    }
+
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: #e63946;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      transform-origin: top;
+      transform: rotateX(0deg);
+      transition: transform 1s ease;
+      z-index: 3;
+    }
+
+    .flap.open {
+      transform: rotateX(-180deg);
+    }
+
+    .letter {
+      position: absolute;
+      top: 40px;
+      left: 10px;
+      width: 280px;
+      height: 160px;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-sizing: border-box;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease;
+      z-index: 1;
+    }
+
+    .letter.show {
+      opacity: 1;
+      transform: translateY(-60px);
+    }
+
+    .declaration {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #333;
+    }
+
+    .show-button {
+      position: absolute;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      border: none;
+      background: #d62828;
+      color: white;
+      font-size: 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    .hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      transform: rotate(45deg);
+      animation: float 5s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: pink;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        bottom: -20px;
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        bottom: 100%;
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="envelope" id="envelope"></div>
+  <div class="flap" id="flap"></div>
+  <div class="letter" id="letter">
+    <div class="declaration">
+      Meu amor,<br><br>
+      Cada momento ao seu lado é um capítulo bonito da nossa história.<br><br>
+      Você é meu porto seguro, meu abraço favorito, meu riso mais leve e meu sonho mais bonito.<br><br>
+      Neste Dia dos Namorados, eu só quero te lembrar que te amo com todas as letras, em todas as línguas, em todos os silêncios.<br><br>
+      Que venham muitos outros jogos, risos e vidas ao seu lado.<br><br>
+      Com todo o meu coração,<br>
+      Igor 💖
+    </div>
+  </div>
+  <button class="show-button" onclick="openEnvelope()">Abrir meu presente 💌</button>
+</div>
+
+<div class="hearts" id="hearts"></div>
+
+<script>
+  function openEnvelope() {
+    document.getElementById("envelope").classList.add("open");
+    document.getElementById("flap").classList.add("open");
+
+    setTimeout(() => {
+      document.getElementById("letter").classList.add("show");
+      releaseHearts();
+    }, 800);
+  }
+
+  function releaseHearts() {
+    const container = document.getElementById("hearts");
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDelay = Math.random() * 5 + "s";
+      container.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+  }
+</script>
+
+</body>
+</html>
