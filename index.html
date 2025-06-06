@@ -1,133 +1,132 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Jogo da Memória do Amor</title>
+  <meta charset="UTF-8" />
+  <title>Seu Presente de Amor 💌</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(#ffc0cb, #ffe4e1);
       margin: 0;
-      padding: 0;
+      height: 100vh;
+      background-color: #f9c5d1; /* rosa delicado */
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-    }
-    h1 {
-      color: #d6336c;
-      margin-top: 40px;
-    }
-    .instrucoes {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
-    .tabuleiro {
-      display: grid;
-      grid-template-columns: repeat(4, 100px);
-      gap: 15px;
       justify-content: center;
-    }
-    .carta {
-      width: 100px;
-      height: 100px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      display: flex;
       align-items: center;
-      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
+
+    .envelope {
+      position: relative;
+      width: 300px;
+      height: 200px;
       cursor: pointer;
-      font-size: 2rem;
-      transition: transform 0.3s ease;
+      perspective: 1000px;
     }
-    .carta.virada {
-      background-color: #fff0f5;
-      transform: rotateY(180deg);
-    }
-    #vitoria {
-      margin-top: 30px;
-      text-align: center;
-      background: #fff0f5;
-      padding: 20px;
+
+    /* Envelope base */
+    .envelope-base {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #e63946; /* vermelho envelope */
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      transition: transform 1s ease;
+      transform-origin: top center;
+      z-index: 1;
     }
-    .escondido {
-      display: none;
+
+    /* Envelope tampa (flap) */
+    .envelope-flap {
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      background: #e63946;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      top: 0;
+      left: 0;
+      transform-origin: bottom center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 1s ease;
+      z-index: 2;
     }
-    .botao-premio {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #ff69b4;
-      color: white;
-      border: none;
+
+    /* Carta dentro do envelope */
+    .carta {
+      position: absolute;
+      width: 260px;
+      height: 160px;
+      top: 20px;
+      left: 20px;
+      background: white;
       border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
+      padding: 20px;
+      box-sizing: border-box;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease 1s, transform 1s ease 1s;
+      user-select: none;
+      z-index: 0;
     }
+
+    .carta.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .carta h2 {
+      margin-top: 0;
+      color: #d6336c;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .carta p {
+      font-size: 18px;
+      color: #333;
+      line-height: 1.4;
+      margin-top: 10px;
+      white-space: pre-line;
+      text-align: center;
+    }
+
   </style>
 </head>
 <body>
-  <h1>Jogo da Memória do Amor 💘</h1>
-  <p class="instrucoes">Encontre todos os pares de corações para ganhar sua surpresa!</p>
-  <div class="tabuleiro" id="tabuleiro"></div>
-  <div id="vitoria" class="escondido">
-    <h2>Parabéns, meu amor! ❤️</h2>
-    <p>Você completou o jogo da memória do nosso amor.<br>Agora clique abaixo para ganhar sua recompensa!</p>
-    <a href="premio.html" class="botao-premio">Ver o prêmio</a>
+
+  <div class="envelope" id="envelope">
+    <div class="envelope-flap" id="flap"></div>
+    <div class="envelope-base"></div>
+    <div class="carta" id="carta">
+      <h2>Minha declaração de amor</h2>
+      <p>
+        Meu amor,  
+        <br><br>
+        Cada instante ao seu lado é um presente precioso.  
+        Você é a luz que ilumina meus dias e aquece meu coração.  
+        Obrigado por ser meu companheiro, amigo e paixão.  
+        Te amo para sempre.  
+        <br><br>
+        Com todo meu carinho,  
+        Igor
+      </p>
+    </div>
   </div>
 
   <script>
-    const emojis = ['💕','💜','💛','💙','💚','❤️'];
-    let cartas = [...emojis, ...emojis];
-    cartas = cartas.sort(() => 0.5 - Math.random());
+    const envelope = document.getElementById('envelope');
+    const flap = document.getElementById('flap');
+    const carta = document.getElementById('carta');
 
-    const tabuleiro = document.getElementById('tabuleiro');
-    let primeiraCarta = null;
-    let bloqueado = false;
-    let paresEncontrados = 0;
-
-    cartas.forEach((emoji, index) => {
-      const carta = document.createElement('div');
-      carta.classList.add('carta');
-      carta.dataset.valor = emoji;
-      carta.dataset.index = index;
-      carta.innerHTML = '';
-
-      carta.addEventListener('click', () => {
-        if (bloqueado || carta.classList.contains('virada')) return;
-
-        carta.classList.add('virada');
-        carta.innerHTML = emoji;
-
-        if (!primeiraCarta) {
-          primeiraCarta = carta;
-        } else {
-          if (primeiraCarta.dataset.valor === carta.dataset.valor && primeiraCarta.dataset.index !== carta.dataset.index) {
-            primeiraCarta = null;
-            paresEncontrados++;
-            if (paresEncontrados === emojis.length) {
-              document.getElementById('vitoria').classList.remove('escondido');
-            }
-          } else {
-            bloqueado = true;
-            setTimeout(() => {
-              primeiraCarta.classList.remove('virada');
-              primeiraCarta.innerHTML = '';
-              carta.classList.remove('virada');
-              carta.innerHTML = '';
-              primeiraCarta = null;
-              bloqueado = false;
-            }, 1000);
-          }
-        }
-      });
-
-      tabuleiro.appendChild(carta);
+    envelope.addEventListener('click', () => {
+      flap.style.transform = 'rotateX(-180deg)';
+      carta.classList.add('show');
     });
   </script>
+
 </body>
 </html>
